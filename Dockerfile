@@ -39,14 +39,17 @@ ENV FC=gfortran
 # set library location
 ENV PREFIXDIR=/usr/local
 
+WORKDIR $HOME
+
 ## get zlib
 ENV ZLIB_VERSION=zlib-1.2.11
 RUN wget https://zlib.net/${ZLIB_VERSION}.tar.gz && tar -xvzf ${ZLIB_VERSION}.tar.gz
 RUN cd ${ZLIB_VERSION} \
     && ./configure --prefix=${PREFIXDIR} \
     && make check \
-    && make install \
-    && rm -rf ${ZLIB_VERSION}.tar.gz ${ZLIB_VERSION}
+    && make install
+WORKDIR $HOME
+RUN rm -rf ${ZLIB_VERSION}.tar.gz ${ZLIB_VERSION}
 
 ## get hdf5-1.8
 ENV HDF518_VERSION=hdf5-1.8.21
@@ -54,8 +57,9 @@ RUN wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8/${HDF518_VERSIO
 RUN cd ${HDF518_VERSION} \
     && ./configure --with-zlib=${PREFIXDIR} --prefix=${PREFIXDIR} --enable-hl \
     && echo "skipping make check" \
-    && make install \
-    && rm -rf ${HDF518_VERSION}.tar.gz ${HDF518_VERSION}
+    && make install
+WORKDIR $HOME
+RUN rm -rf ${HDF518_VERSION}.tar.gz ${HDF518_VERSION}
 
 ## get hdf5-1.10
 ENV HDF5110_VERSION=hdf5-1.10.2
@@ -63,8 +67,9 @@ RUN wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/${HDF5110_VERS
 RUN cd ${HDF5110_VERSION} \
     && ./configure --with-zlib=${PREFIXDIR} --prefix=${PREFIXDIR} --enable-hl --enable-shared \
     && make check \
-    && make install \
-    && rm -rf ${HDF5110_VERSION}.tar.gz ${HDF5110_VERSION}
+    && make install
+WORKDIR $HOME
+RUN rm -rf ${HDF5110_VERSION}.tar.gz ${HDF5110_VERSION}
 
 ## get netcdf-c
 ENV NETCDFC_VERSION=4.6.1
@@ -73,8 +78,9 @@ ENV LD_LIBRARY_PATH=${PREFIXDIR}/lib
 RUN cd netcdf-c-${NETCDFC_VERSION} \
     && CPPFLAGS=-I${PREFIXDIR}/include LDFLAGS=-L${PREFIXDIR}/lib ./configure --prefix=${PREFIXDIR} --enable-netcdf-4 --enable-shared --enable-dap \
     && make check \
-    && make install \
-    && rm -rf v${NETCDFC_VERSION}.tar.gz netcdf-c-${NETCDFC_VERSION}
+    && make install
+WORKDIR $HOME
+RUN rm -rf v${NETCDFC_VERSION}.tar.gz netcdf-c-${NETCDFC_VERSION}
 
 ## get netcdf-fortran
 ENV NETCDFFORTRAN_VERSION=4.4.4
@@ -82,8 +88,9 @@ RUN wget https://github.com/Unidata/netcdf-fortran/archive/v${NETCDFFORTRAN_VERS
 RUN cd netcdf-fortran-${NETCDFFORTRAN_VERSION} \
     && CPPFLAGS=-I${PREFIXDIR}/include LDFLAGS=-L${PREFIXDIR}/lib ./configure --prefix=${PREFIXDIR} \
     && make check \
-    && make install \
-    && rm -rf v${NETCDFFORTRAN_VERSION}.tar.gz netcdf-fortran-${NETCDFFORTRAN_VERSION}
+    && make install
+WORKDIR $HOME
+RUN rm -rf v${NETCDFFORTRAN_VERSION}.tar.gz netcdf-fortran-${NETCDFFORTRAN_VERSION}
 
 ENTRYPOINT [ "/usr/bin/tini", "--" ]
 CMD [ "/bin/bash" ]
