@@ -48,7 +48,6 @@ RUN cd ${ZLIB_VERSION} \
     && make install \
     && rm -rf ${ZLIB_VERSION}.tar.gz ${ZLIB_VERSION}
 
-
 ## get hdf5-1.8
 ENV HDF518_VERSION=hdf5-1.8.21
 RUN wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8/${HDF518_VERSION}/src/${HDF518_VERSION}.tar.gz && tar -xvzf ${HDF518_VERSION}.tar.gz
@@ -63,7 +62,7 @@ ENV HDF5110_VERSION=hdf5-1.10.2
 RUN wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/${HDF5110_VERSION}/src/${HDF5110_VERSION}.tar.gz && tar -xvzf ${HDF5110_VERSION}.tar.gz
 RUN cd ${HDF5110_VERSION} \
     && ./configure --with-zlib=${PREFIXDIR} --prefix=${PREFIXDIR} --enable-hl --enable-shared \
-    && echo "skipping make check" \
+    && make check \
     && make install \
     && rm -rf ${HDF5110_VERSION}.tar.gz ${HDF5110_VERSION}
 
@@ -73,7 +72,7 @@ RUN wget https://github.com/Unidata/netcdf-c/archive/v${NETCDFC_VERSION}.tar.gz 
 ENV LD_LIBRARY_PATH=${PREFIXDIR}/lib
 RUN cd netcdf-c-${NETCDFC_VERSION} \
     && CPPFLAGS=-I${PREFIXDIR}/include LDFLAGS=-L${PREFIXDIR}/lib ./configure --prefix=${PREFIXDIR} --enable-netcdf-4 --enable-shared --enable-dap \
-    && echo "skipping make check" \
+    && make check \
     && make install \
     && rm -rf v${NETCDFC_VERSION}.tar.gz netcdf-c-${NETCDFC_VERSION}
 
@@ -82,10 +81,9 @@ ENV NETCDFFORTRAN_VERSION=4.4.4
 RUN wget https://github.com/Unidata/netcdf-fortran/archive/v${NETCDFFORTRAN_VERSION}.tar.gz && tar -xvzf v${NETCDFFORTRAN_VERSION}.tar.gz
 RUN cd netcdf-fortran-${NETCDFFORTRAN_VERSION} \
     && CPPFLAGS=-I${PREFIXDIR}/include LDFLAGS=-L${PREFIXDIR}/lib ./configure --prefix=${PREFIXDIR} \
-    && echo "skipping make check" \
+    && make check \
     && make install \
     && rm -rf v${NETCDFFORTRAN_VERSION}.tar.gz netcdf-fortran-${NETCDFFORTRAN_VERSION}
-
 
 ENTRYPOINT [ "/usr/bin/tini", "--" ]
 CMD [ "/bin/bash" ]
