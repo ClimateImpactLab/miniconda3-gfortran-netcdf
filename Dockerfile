@@ -46,7 +46,7 @@ RUN cd ${ZLIB_VERSION} \
     && ./configure --prefix=${PREFIXDIR} \
     && make check \
     && make install \
-    && rm -rf /${ZLIB_VERSION}.tar.gz /${ZLIB_VERSION}
+    && rm -rf ${ZLIB_VERSION}.tar.gz ${ZLIB_VERSION}
 
 
 ## get hdf5-1.8
@@ -56,7 +56,7 @@ RUN cd ${HDF518_VERSION} \
     && ./configure --with-zlib=${PREFIXDIR} --prefix=${PREFIXDIR} --enable-hl \
     && echo "skipping make check" \
     && make install \
-    && rm -rf /${HDF518_VERSION}.tar.gz /${HDF518_VERSION}
+    && rm -rf ${HDF518_VERSION}.tar.gz ${HDF518_VERSION}
 
 ## get hdf5-1.10
 ENV HDF5110_VERSION=hdf5-1.10.2
@@ -65,7 +65,7 @@ RUN cd ${HDF5110_VERSION} \
     && ./configure --with-zlib=${PREFIXDIR} --prefix=${PREFIXDIR} --enable-hl --enable-shared \
     && echo "skipping make check" \
     && make install \
-    && rm -rf /${HDF5110_VERSION}.tar.gz /${HDF5110_VERSION}
+    && rm -rf ${HDF5110_VERSION}.tar.gz ${HDF5110_VERSION}
 
 ## get netcdf-c
 ENV NETCDFC_VERSION=4.6.1
@@ -75,7 +75,7 @@ RUN cd netcdf-c-${NETCDFC_VERSION} \
     && CPPFLAGS=-I${PREFIXDIR}/include LDFLAGS=-L${PREFIXDIR}/lib ./configure --prefix=${PREFIXDIR} --enable-netcdf-4 --enable-shared --enable-dap \
     && echo "skipping make check" \
     && make install \
-    && rm -rf /v${NETCDFC_VERSION}.tar.gz /netcdf-c-${NETCDFC_VERSION}
+    && rm -rf v${NETCDFC_VERSION}.tar.gz netcdf-c-${NETCDFC_VERSION}
 
 ## get netcdf-fortran
 ENV NETCDFFORTRAN_VERSION=4.4.4
@@ -84,7 +84,7 @@ RUN cd netcdf-fortran-${NETCDFFORTRAN_VERSION} \
     && CPPFLAGS=-I${PREFIXDIR}/include LDFLAGS=-L${PREFIXDIR}/lib ./configure --prefix=${PREFIXDIR} \
     && echo "skipping make check" \
     && make install \
-    && rm -rf /v${NETCDFFORTRAN_VERSION}.tar.gz /netcdf-fortran-${NETCDFFORTRAN_VERSION}
+    && rm -rf v${NETCDFFORTRAN_VERSION}.tar.gz netcdf-fortran-${NETCDFFORTRAN_VERSION}
 
 
 ENTRYPOINT [ "/usr/bin/tini", "--" ]
