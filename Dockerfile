@@ -5,20 +5,20 @@ RUN wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/
 RUN chmod +x /usr/local/bin/dumb-init
 
 USER root
-RUN apt-get update \
-  && apt-get install -yq --no-install-recommends \
+RUN apt-get update
+RUN apt-get install -yq --no-install-recommends gfortran gcc g++ liblapack-dev
+RUN apt-get upgrade -yq gfortran gcc g++ liblapack-dev
+
+RUN apt-get install -yq --no-install-recommends \
   build-essential \
   curl \
   fuse \
-  gfortran \
-  g++ \
   git \
   gnupg \
   gnupg2 \
   keychain \
   libcurl4-openssl-dev \
   libfuse-dev \
-  liblapack-dev \
   libssl-dev \
   locate \
   lsb-release \
