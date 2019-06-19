@@ -32,7 +32,7 @@ RUN wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/
 RUN chmod +x /usr/local/bin/dumb-init
 
 # install other apt-get packages
-
+ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get install -yq --no-install-recommends \
   build-essential \
   fuse \
