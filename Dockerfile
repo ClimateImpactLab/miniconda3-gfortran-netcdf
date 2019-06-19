@@ -10,9 +10,9 @@ ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 ENV PATH /opt/conda/bin:$PATH
 
 RUN apt-get update --fix-missing && \
-    apt upgrade --yes && \
     apt-get install -yq --no-install-recommends apt-utils \
-    wget bzip2 ca-certificates curl git
+    wget bzip2 ca-certificates curl git && \
+    apt-get upgrade --yes
 
 RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-4.6.14-Linux-x86_64.sh -O ~/miniconda.sh && \
     /bin/bash ~/miniconda.sh -b -p /opt/conda && \
@@ -33,8 +33,7 @@ RUN chmod +x /usr/local/bin/dumb-init
 
 # install other apt-get packages
 
-RUN DEBIAN_FRONTEND=noninteractive && \
-  apt-get install -yq --no-install-recommends \
+RUN apt-get install -yq --no-install-recommends \
   build-essential \
   fuse \
   gfortran \
