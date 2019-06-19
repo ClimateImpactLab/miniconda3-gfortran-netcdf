@@ -33,7 +33,8 @@ RUN chmod +x /usr/local/bin/dumb-init
 
 # install other apt-get packages
 
-RUN apt-get install -yq --no-install-recommends \
+RUN DEBIAN_FRONTEND=noninteractive && \
+  apt-get install -yq --no-install-recommends \
   build-essential \
   fuse \
   gfortran \
