@@ -1,0 +1,31 @@
+language: python
+
+services:
+  -docker
+
+install:
+  - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+  - docker build -t climateimpactlab/miniconda3-gfortran-netcdf:$TRAVIS_COMMIT .
+
+script:
+  - docker push "climateimpactlab/miniconda3-gfortran-netcdf:$TRAVIS_COMMIT"
+
+deploy:
+  - provider: script
+    script: docker tag climateimpactlab/miniconda3-gfortran-netcdf:$TRAVIS_COMMIT climateimpactlab/miniconda3-gfortran-netcdf:$TRAVIS_BRANCH && docker push "climateimpactlab/miniconda3-gfortran-netcdf:$TRAVIS_BRANCH"
+    skip_cleanup: true
+    on:
+      all_branches: true
+      condition: $TRAVIS_BRANCH != master
+
+  - provider: script
+    script: docker tag climateimpactlab/miniconda3-gfortran-netcdf:$TRAVIS_COMMIT climateimpactlab/miniconda3-gfortran-netcdf:latest && docker push "climateimpactlab/miniconda3-gfortran-netcdf:latest"
+    skip_cleanup: true
+    on:
+      branch: master
+
+  - provider: script
+    script: docker tag climateimpactlab/miniconda3-gfortran-netcdf:$TRAVIS_COMMIT climateimpactlab/miniconda3-gfortran-netcdf:$TRAVIS_TAG && docker push "climateimpactlab/miniconda3-gfortran-netcdf:$TRAVIS_TAG"
+    skip_cleanup: true
+    on:
+      tags: true
